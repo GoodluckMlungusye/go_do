@@ -5,51 +5,28 @@ import 'package:go_do/models/Task.dart';
 
 class CategoryModel extends BaseViewModel {
   CategoryModel() {
-    taskBox = Hive.box('task');
-    categoryBox = Hive.box('category');
+    taskBox = Hive.box<Task>('task');
+    categoryBox = Hive.box<Category>('category');
   }
 
-  late Box<Task> taskBox;
-  late Box<Category> categoryBox;
+  late final Box<Task> taskBox;
+  late final Box<Category> categoryBox;
 
-  List<Task> totalTasksAccomplished = [];
+  /// Returns the total number of tasks
+  int getTotalTasks() => taskBox.length;
 
-  List<Task> totalCategoryTasks = [];
-
-  List<Task> totalCategoryTasksAccomplished = [];
-
-  int getTotalTasks() {
-    return taskBox.length;
-  }
-
-  // int getTotalTasksAccomplished() {
-  //   totalTasksAccomplished.clear();
-  //   for (Task task in taskBox.values.toList()) {
-  //     if (task.isFinished) {
-  //       totalTasksAccomplished.add(task);
-  //     }
-  //   }
-  //   return totalTasksAccomplished.length;
-  // }
-
+  /// Returns the total number of tasks that are accomplished
   int getTotalTasksAccomplished() {
     return taskBox.values.where((task) => task.isFinished).length;
   }
 
+  /// Returns the percentage of tasks accomplished
   double getAccomplishedPercent() {
-    return getTotalTasksAccomplished() / getTotalTasks();
+    final totalTasks = getTotalTasks();
+    return totalTasks > 0 ? getTotalTasksAccomplished() / totalTasks : 0.0;
   }
 
-  // int getTotalCategoryTasks(String categoryName) {
-  //   totalCategoryTasks.clear();
-  //   for (Task task in taskBox.values.toList()) {
-  //     if (categoryBox.getAt(task.categoryKey)!.name == categoryName) {
-  //       totalCategoryTasks.add(task);
-  //     }
-  //   }
-  //   return totalCategoryTasks.length;
-  // }
-
+  /// Returns the total number of tasks for a given category
   int getTotalCategoryTasks(String categoryName) {
     return taskBox.values
         .where(
@@ -57,17 +34,7 @@ class CategoryModel extends BaseViewModel {
         .length;
   }
 
-  // int getTotalCategoryTasksAccomplished(String categoryName) {
-  //   totalCategoryTasksAccomplished.clear();
-  //   for (Task task in taskBox.values.toList()) {
-  //     if (categoryBox.getAt(task.categoryKey)!.name == categoryName &&
-  //         task.isFinished) {
-  //       totalCategoryTasksAccomplished.add(task);
-  //     }
-  //   }
-  //   return totalCategoryTasksAccomplished.length;
-  // }
-
+  /// Returns the total number of tasks accomplished for a given category
   int getTotalCategoryTasksAccomplished(String categoryName) {
     return taskBox.values
         .where((task) =>
@@ -76,37 +43,28 @@ class CategoryModel extends BaseViewModel {
         .length;
   }
 
-  // double getAccomplishedCategoryPercent(String categoryName) {
-  //   return getTotalCategoryTasksAccomplished(categoryName) /
-  //       getTotalCategoryTasks(categoryName);
-  // }
-
+  /// Returns the percentage of accomplished tasks for a given category
   double getAccomplishedCategoryPercent(String categoryName) {
-    int totalTasks = getTotalCategoryTasks(categoryName);
-    if (totalTasks == 0) {
-      return 0.0;
-    }
-    return getTotalCategoryTasksAccomplished(categoryName) / totalTasks;
+    final totalCategoryTasks = getTotalCategoryTasks(categoryName);
+    return totalCategoryTasks > 0
+        ? getTotalCategoryTasksAccomplished(categoryName) / totalCategoryTasks
+        : 0.0;
   }
 
-  // int getTotalCategoryTasksLeft(String categoryName) {
-  //   return (getTotalCategoryTasks(categoryName) -
-  //       getTotalCategoryTasksAccomplished(categoryName));
-  // }
-
+  /// Returns the total number of tasks left for a given category
   int getTotalCategoryTasksLeft(String categoryName) {
-    int totalTasks = getTotalCategoryTasks(categoryName);
-    int accomplishedTasks = getTotalCategoryTasksAccomplished(categoryName);
-
-    return (totalTasks - accomplishedTasks).clamp(0, totalTasks);
+    return getTotalCategoryTasks(categoryName) -
+        getTotalCategoryTasksAccomplished(categoryName);
   }
 
+  /// Generates a completion message based on the number of completed tasks
   String getCompletionMessage(int accomplishedTasks, int totalTasks) {
     return accomplishedTasks < 2
         ? "$accomplishedTasks out of $totalTasks is completed"
         : "$accomplishedTasks out of $totalTasks are completed";
   }
 
+  /// Generates a motivational message based on the accomplished percent
   String getMotivationalMessage(double accomplishedPercent) {
     return accomplishedPercent < 0.5
         ? "Finish more tasks, reach your plans!"

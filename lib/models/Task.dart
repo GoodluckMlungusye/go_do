@@ -27,4 +27,24 @@ class Task extends HiveObject {
     required this.priority,
     this.isFinished = false,
   });
+
+  Task copyWith({
+    String? name,
+    int? categoryKey,
+    String? tacklingDate,
+    String? startTime,
+    String? endTime,
+    String? priority,
+    bool? isFinished,
+  }) {
+    return Task(
+      name: name ?? this.name,
+      categoryKey: categoryKey ?? this.categoryKey,
+      tacklingDate: tacklingDate ?? this.tacklingDate,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      priority: priority ?? this.priority,
+      isFinished: isFinished ?? this.isFinished,
+    );
+  }
 }

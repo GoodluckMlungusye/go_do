@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:go_do/views/starters/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:go_do/themes/theme_assets.dart';
+import 'package:go_do/views/starters/welcome.dart';
 
 class Loader extends StatefulWidget {
   const Loader({super.key});
@@ -11,17 +11,17 @@ class Loader extends StatefulWidget {
 }
 
 class _LoaderState extends State<Loader> {
-  void checkTimer() {
-    Timer(const Duration(seconds: 4), () {
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const WelcomePage()));
-    });
+  Future<void> _navigateAfterDelay() async {
+    await Future.delayed(const Duration(seconds: 4));
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const WelcomePage()),
+    );
   }
 
   @override
   void initState() {
     super.initState();
-    checkTimer();
+    _navigateAfterDelay();
   }
 
   @override
@@ -35,14 +35,15 @@ class _LoaderState extends State<Loader> {
             Text(
               'GoDo',
               style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Colors.white),
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Colors.white,
+              ),
             ),
             SizedBox(height: 20),
             CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-            )
+            ),
           ],
         ),
       ),
