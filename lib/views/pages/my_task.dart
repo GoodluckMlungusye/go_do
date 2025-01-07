@@ -1,15 +1,10 @@
 import 'package:go_do/models/Task.dart';
-import 'package:go_do/views/pages/my_tasks.dart';
+import 'package:go_do/views/pages/tasks.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hive/hive.dart';
-import 'package:go_do/models/Category.dart';
-import 'package:go_do/themes/theme_assets.dart';
-import 'package:intl/intl.dart';
 import 'package:go_do/views/starters/navigation.dart';
 import 'package:stacked/stacked.dart';
 import 'package:go_do/view_models/task_model.dart';
-
+import 'package:go_do/views/components/main/task_form.dart';
 
 class MyTaskPage extends StatelessWidget {
   final bool isHomeReturn;
@@ -19,9 +14,38 @@ class MyTaskPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<TaskModel>.reactive(
-        builder: (context, model, child) => Expanded(
-          child: Text('')
-        ),
+        builder: (context, model, child) {
+          Widget _targetWidget = isHomeReturn
+              ? const Navigation()
+              : TasksPage(
+                  taskCategory: model.categoryBox.getAt(task.categoryKey)!.name,
+                );
+          return SafeArea(
+            child: Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => _targetWidget));
+                    },
+                    icon: const Icon(Icons.arrow_back_ios,
+                        color: Colors.black26)),
+                title: const Text(
+                  'Manage Task',
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                ),
+                centerTitle: true,
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+              ),
+              body: SingleChildScrollView(
+                child: TaskForm(task: task, isHomeReturn: isHomeReturn)
+              ),
+            ),
+          );
+        },
         viewModelBuilder: () => TaskModel());
   }
 }
+

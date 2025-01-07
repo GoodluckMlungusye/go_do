@@ -1,12 +1,12 @@
-import 'package:GoDo/themes/theme_assets.dart';
-import 'package:GoDo/views/startups/navigation.dart';
+import 'package:go_do/themes/theme_assets.dart';
+import 'package:go_do/views/starters/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
-import '../../models/Category.dart';
-import '../../models/Task.dart';
-import 'my_task.dart';
+import 'package:go_do/models/Category.dart';
+import 'package:go_do/models/Task.dart';
+import 'package:go_do/views/pages/my_task.dart';
 
 class TasksPage extends StatefulWidget {
   final String taskCategory;
@@ -173,7 +173,7 @@ class _TasksPageState extends State<TasksPage> {
                                     padding: const EdgeInsets.only(top: 20),
                                     child: ListTile(
                                       onTap: (){
-                                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyTask(task:task, isHomeReturn: false)));
+                                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyTaskPage(task:task, isHomeReturn: false)));
                                       },
                                       title: Column(
                                         children: [

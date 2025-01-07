@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:go_do/models/Category.dart';
 import 'package:go_do/view_models/category_model.dart';
-import 'package:go_do/views/pages/my_tasks.dart';
+import 'package:go_do/views/pages/tasks.dart';
 import 'package:go_do/utils/toast_messages/error_toast_message.dart';
 import 'package:go_do/views/components/child/category_gesture_detector_column.dart';
 
@@ -16,23 +16,12 @@ class CategoryGestureDetector extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<CategoryModel>.reactive(
         builder: (context, model, child) => GestureDetector(
-              // onTap: () {
-              //  totalCategoryTasks < 1?
-              //  showErrorToastMessage('No tasks'):
-              //   Navigator.of(context).pushReplacement(
-              //       MaterialPageRoute(
-              //           builder: (BuildContext
-              //           context) =>
-              //               TasksPage(
-              //                   taskCategory:
-              //                   category
-              //                       .name)));
-              // },
               onTap: () {
                 totalCategoryTasks < 1
                     ? showErrorToastMessage('No tasks')
                     : Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (BuildContext context) => TasksPage()));
+                        builder: (BuildContext context) =>
+                            TasksPage(taskCategory: category.name)));
               },
               child: SizedBox(
                 height: 50,

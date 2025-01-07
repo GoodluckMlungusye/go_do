@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'package:hive/hive.dart';
@@ -6,20 +7,40 @@ import 'package:go_do/models/Task.dart';
 import 'package:go_do/models/Category.dart';
 
 class TaskModel extends BaseViewModel {
+  TaskModel() {
+    taskBox = Hive.box<Task>('task');
+    categoryBox = Hive.box<Category>('category');
+    _categoryList = categoryBox.values.toList();
+    _categoryNames = _getCategoryNames(_categoryList);
+  }
 
+  final double _leftPadding = 13;
   late final Box<Task> taskBox;
   late final Box<Category> categoryBox;
   late final int _selectedCategory;
   late final String _selectedPriority;
-  final double _leftPadding = 13;
+  late final List<Category> _categoryList;
+  late final List<String> _categoryNames;
   final List<String> _priorityItems = ['High', 'Medium', 'Low'];
+  DateTime _dateTime = DateTime.now();
 
+  final _formKey = GlobalKey<FormState>();
 
-  List<String> getCategoryNames(List<Category> categories) {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController startTimeController = TextEditingController();
+  final TextEditingController endTimeController = TextEditingController();
+
+  double get leftPadding => _leftPadding;
+  List<String> get categoryNames => _categoryNames;
+  List<String> get priorityItems => _priorityItems;
+  GlobalKey<FormState> get formKey => _formKey;
+
+  List<String> _getCategoryNames(List<Category> categories) {
     return categories.map((category) => category.name).toList();
   }
 
-  void getCategoryKey(String newValue) {
+  void getCategoryKey(String? newValue) {
     final matchingKey = categoryBox.keys.firstWhere(
       (key) => categoryBox.get(key)?.name == newValue,
       orElse: () => null,
@@ -31,6 +52,11 @@ class TaskModel extends BaseViewModel {
     } else {
       debugPrint('Category "$newValue" not found.');
     }
+  }
+
+  void setSelectedPriority(String? newValue){
+    _selectedPriority = newValue!;
+    notifyListeners();
   }
 
   String? validateEmptyField(String? input) {
@@ -50,31 +76,18 @@ class TaskModel extends BaseViewModel {
     return null;
   }
 
-  final _formKey = GlobalKey<FormState>();
-
-  DateTime _dateTime = DateTime.now();
-  TimeOfDay _startTime = TimeOfDay.now();
-  TimeOfDay _endTime = TimeOfDay.now();
-
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _startTimeController = TextEditingController();
-  final TextEditingController _endTimeController = TextEditingController();
-
-  void updateDate(DateTime value) {
-    _dateTime = value;
-    _dateController.text = DateFormat('dd MMMM, y').format(_dateTime);
+  void updateDate(DateTime? value) {
+    _dateTime = value!;
+    dateController.text = DateFormat('dd MMMM, y').format(_dateTime);
     notifyListeners();
   }
 
   void updateTime(TimeOfDay? newTime, String? timeStatus) {
     if (newTime != null) {
       if (timeStatus == 'start') {
-        _startTime = newTime;
-        _startTimeController.text = _formatTime(newTime);
+        startTimeController.text = _formatTime(newTime);
       } else {
-        _endTime = newTime;
-        _endTimeController.text = _formatTime(newTime);
+        endTimeController.text = _formatTime(newTime);
       }
       notifyListeners();
     }
@@ -86,13 +99,44 @@ class TaskModel extends BaseViewModel {
     return '$hour:$minute hrs';
   }
 
+  void updateTask(Task task) {
+    final isValid = _formKey.currentState?.validate();
+    if (isValid != null && isValid) {
+      _formKey.currentState?.save();
+      final _updatedTask = task.copyWith(
+          name: nameController.text,
+          categoryKey: _selectedCategory,
+          tacklingDate: _dateTime.toString(),
+          startTime: startTimeController.text,
+          endTime: endTimeController.text,
+          priority: _selectedPriority);
+      taskBox.put(task.key, _updatedTask);
+      notifyListeners();
+      _showToast('task updated successfully', Colors.green);
+    }
+  }
 
-  // void _showTimePicker({String? timeStatus}) async {
-  //   TimeOfDay initialTime = timeStatus == 'start' ? _startTime : _endTime;
-  //   TimeOfDay? newTime = await showTimePicker(
-  //     context: context,
-  //     initialTime: initialTime,
-  //   );
-  //   model.updateTime(newTime,timeStatus);
-  // }
+  void _showToast(String message, Color backgroundColor) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: backgroundColor,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
+
+  Future<void> deleteTask(int taskKey) async {
+    await taskBox.delete(taskKey);
+    notifyListeners();
+  }
+
+  void handleCheckBoxChange(bool? value, Task task) {
+    if (value == null) return;
+    final updatedTask = task.copyWith(isFinished: value);
+    taskBox.putAt(task.key, updatedTask);
+    notifyListeners();
+  }
+
 }
