@@ -5,6 +5,8 @@ import 'package:stacked/stacked.dart';
 import 'package:hive/hive.dart';
 import 'package:go_do/models/Task.dart';
 import 'package:go_do/models/Category.dart';
+import 'package:go_do/services/service_injector/dependency_container.dart';
+import 'package:go_do/services/task_service.dart';
 
 class TaskModel extends BaseViewModel {
   TaskModel() {
@@ -14,6 +16,7 @@ class TaskModel extends BaseViewModel {
     _categoryNames = _getCategoryNames(_categoryList);
   }
 
+  final _taskService = locator.get<TaskService>();
   final double _leftPadding = 13;
   late final Box<Task> taskBox;
   late final Box<Category> categoryBox;
@@ -45,16 +48,15 @@ class TaskModel extends BaseViewModel {
       (key) => categoryBox.get(key)?.name == newValue,
       orElse: () => null,
     );
-
     if (matchingKey != null) {
       _selectedCategory = matchingKey;
       notifyListeners();
     } else {
-      debugPrint('Category "$newValue" not found.');
+      _showToast('Category "$newValue" not found.', Colors.red);
     }
   }
 
-  void setSelectedPriority(String? newValue){
+  void setSelectedPriority(String? newValue) {
     _selectedPriority = newValue!;
     notifyListeners();
   }
@@ -139,4 +141,14 @@ class TaskModel extends BaseViewModel {
     notifyListeners();
   }
 
+  Widget getPriorityIcon(String priority) {
+    return _taskService.getPriorityIcon(priority);
+  }
+
+  List<Task> getCategoryTasks(String taskCategory) {
+    return taskBox.values
+        .where(
+            (task) => categoryBox.getAt(task.categoryKey)!.name == taskCategory)
+        .toList();
+  }
 }
