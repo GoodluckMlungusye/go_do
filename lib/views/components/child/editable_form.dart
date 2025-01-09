@@ -1,7 +1,6 @@
 import 'package:go_do/models/Task.dart';
 import 'package:go_do/views/pages/tasks.dart';
 import 'package:flutter/material.dart';
-import 'package:go_do/themes/theme_assets.dart';
 import 'package:intl/intl.dart';
 import 'package:go_do/views/starters/navigation.dart';
 import 'package:stacked/stacked.dart';
@@ -39,13 +38,13 @@ class EditableForm extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 15),
-                  _buildTextFormField(
+                  model.buildTextFormField(
                       controller: model.nameController,
                       validator: model.validateInputLength,
                       hintText: task.name,
                       labelText: 'Name'),
                   const SizedBox(height: 30),
-                  _buildDropdownFormField(
+                  model.buildDropdownFormField(
                     items: model.categoryNames,
                     hintText:
                     model.categoryBox.getAt(task.categoryKey)!.name,
@@ -55,7 +54,7 @@ class EditableForm extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: 30),
-                  _buildTextFormField(
+                  model.buildTextFormField(
                       controller: model.dateController,
                       validator: model.validateEmptyField,
                       hintText: DateFormat('dd MMMM, y')
@@ -63,7 +62,7 @@ class EditableForm extends StatelessWidget {
                       labelText: 'Tackling date',
                       onTap: () => _showDatePicker(context, model)),
                   const SizedBox(height: 30),
-                  _buildTextFormField(
+                  model.buildTextFormField(
                       controller: model.startTimeController,
                       validator: model.validateEmptyField,
                       hintText: task.startTime,
@@ -71,14 +70,14 @@ class EditableForm extends StatelessWidget {
                       onTap: () => _showTimePicker(context, model,
                           timeStatus: 'start')),
                   const SizedBox(height: 30),
-                  _buildTextFormField(
+                  model.buildTextFormField(
                       controller: model.endTimeController,
                       validator: model.validateEmptyField,
                       hintText: task.endTime,
                       labelText: 'End time',
                       onTap: () => _showTimePicker(context, model)),
                   const SizedBox(height: 30),
-                  _buildDropdownFormField(
+                  model.buildDropdownFormField(
                     items: model.priorityItems,
                     hintText: task.priority,
                     labelText: 'Priority',
@@ -121,67 +120,6 @@ class EditableForm extends StatelessWidget {
         },
         viewModelBuilder: () => TaskModel());
   }
-}
-
-Widget _buildTextFormField({
-  required TextEditingController controller,
-  required String? Function(String?)? validator,
-  required String hintText,
-  required String labelText,
-  void Function()? onTap,
-}) {
-  return TextFormField(
-    controller: controller,
-    validator: validator,
-    decoration: InputDecoration(
-      hintText: hintText,
-      labelText: labelText,
-      focusColor: AppColors.primaryColor,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(4),
-      ),
-      focusedBorder: const OutlineInputBorder(
-        borderSide: BorderSide(color: AppColors.primaryColor),
-      ),
-    ),
-    onTap: onTap
-  );
-}
-
-Widget _buildDropdownFormField({
-  required List<String> items,
-  required String hintText,
-  required String labelText,
-  required void Function(String?)? onChanged,
-  String? selectedValue,
-}) {
-  return DropdownButtonFormField<String>(
-    value: selectedValue,
-    onChanged: onChanged,
-    items: items.map((String value) {
-      return DropdownMenuItem<String>(
-        value: value,
-        child: Text(value),
-      );
-    }).toList(),
-    decoration: InputDecoration(
-      hintText: hintText,
-      labelText: labelText,
-      focusColor: AppColors.primaryColor,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(6),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: AppColors.primaryColor),
-      ),
-    ),
-    validator: (value) {
-      if (value == null) {
-        return 'Please select an option';
-      }
-      return null;
-    },
-  );
 }
 
 void _showDatePicker(BuildContext context, TaskModel model) {

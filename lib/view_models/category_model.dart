@@ -1,7 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hive/hive.dart';
 import 'package:stacked/stacked.dart';
 import 'package:go_do/models/Category.dart';
 import 'package:go_do/models/Task.dart';
+import 'package:go_do/services/service_injector/dependency_container.dart';
+import 'package:go_do/services/task_service.dart';
+import 'package:go_do/themes/theme_assets.dart';
 
 class CategoryModel extends BaseViewModel {
   CategoryModel() {
@@ -9,8 +14,15 @@ class CategoryModel extends BaseViewModel {
     categoryBox = Hive.box<Category>('category');
   }
 
+  final _taskService = locator.get<TaskService>();
   late final Box<Task> taskBox;
   late final Box<Category> categoryBox;
+  Color categoryColor = Colors.deepPurple;
+  final _formKey = GlobalKey<FormState>();
+
+  final TextEditingController nameController = TextEditingController();
+
+  GlobalKey<FormState> get formKey => _formKey;
 
   int getTotalTasks() => taskBox.length;
 
@@ -60,5 +72,42 @@ class CategoryModel extends BaseViewModel {
     return accomplishedPercent < 0.5
         ? "Finish more tasks, reach your plans!"
         : "Hello, You are almost there!";
+  }
+
+  void addCategory() {
+    if (_formKey.currentState?.validate() ?? false) {
+      _formKey.currentState?.save();
+      final newCategory = Category(
+        name: nameController.text.trim(),
+        categoryColor: categoryColor.value,
+      );
+      categoryBox.add(newCategory);
+      _resetForm();
+      notifyListeners();
+      _showToast('Category added successfully', Colors.green);
+    }
+  }
+
+  void _resetForm() {
+    nameController.clear();
+    categoryColor = AppColors.primaryColor;
+  }
+
+  Widget buildColorPicker() => ColorPicker(
+      pickerColor: categoryColor,
+      enableAlpha: false,
+      onColorChanged: (color) => _changeColor(color));
+
+  String? validateInputLength(String? input) {
+    return _taskService.validateInputLength(input);
+  }
+
+  void _changeColor(Color color) {
+    categoryColor = color;
+    notifyListeners();
+  }
+
+  void _showToast(String message, Color backgroundColor) {
+    _taskService.showToast(message, backgroundColor);
   }
 }

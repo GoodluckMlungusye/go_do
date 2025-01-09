@@ -9,4 +9,14 @@ class Category extends HiveObject {
   final int categoryColor;
 
   Category({required this.name, required this.categoryColor});
+
+  Category copyWith({
+    String? name,
+    int? categoryColor
+  }) {
+    return Category(
+        name: name ?? this.name,
+        categoryColor: categoryColor ?? this.categoryColor
+    );
+  }
 }
