@@ -22,12 +22,12 @@ class TasksPage extends StatelessWidget {
                             builder: (BuildContext context) =>
                                 const Navigation()));
                       },
-                      icon: const Icon(Icons.arrow_back_ios)),
+                      icon: const Icon(Icons.arrow_back_ios, color: Colors.white)),
                   backgroundColor: AppColors.primaryColor,
                   elevation: 0,
                   title: Text(
                     taskCategory,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                   centerTitle: true,
                 ),

@@ -1,26 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:go_do/themes/theme_assets.dart';
 import 'package:go_do/view_models/home_model.dart';
 import 'package:go_do/views/components/main/home_page_column.dart';
+import 'package:go_do/services/service_injector/dependency_container.dart';
+import 'package:go_do/services/ui_service.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+  final _uiService = locator.get<UiService>();
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeModel>.reactive(
         builder: (context, model, child) => SafeArea(
               child: Scaffold(
-                  appBar: AppBar(
-                    backgroundColor: AppColors.primaryColor,
-                    elevation: 0,
-                    title: const Text(
-                      'GoDo',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    centerTitle: true,
-                  ),
+                  appBar: _uiService.getAppBar('GoDo'),
                   body: model.todayTasks.isNotEmpty
                       ? HomePageColumn()
                       : const Center(

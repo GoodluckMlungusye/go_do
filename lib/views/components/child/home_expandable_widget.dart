@@ -42,7 +42,11 @@ Widget _taskCard(BuildContext context, HomeModel model, Task task, int index) {
       child: Card(
         elevation: 4,
         child: ListTile(
-          onTap: () => _handleTaskTap(context, task),
+          onTap: () => {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) =>
+                    MyTaskPage(task: task, isHomeReturn: true)))
+          },
           title: _buildTaskTitle(model, task),
           subtitle: _buildTaskSubtitle(task),
           leading: _buildCheckbox(context, model, task, index),
@@ -100,7 +104,7 @@ Widget _buildCheckbox(
       model.handleCheckBoxChange(newBool, task, index);
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => ProgressViewer(isFinished: task.isFinished),
+          builder: (context) => ProgressViewer(),
         ),
       );
     },
@@ -114,7 +118,7 @@ Widget _buildTrailingIcon(BuildContext context, HomeModel model, Task task) {
         model.deleteTask(task.key);
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => ProgressViewer(isFinished: task.isFinished),
+            builder: (context) => ProgressViewer(),
           ),
         );
       },
@@ -125,10 +129,3 @@ Widget _buildTrailingIcon(BuildContext context, HomeModel model, Task task) {
   }
 }
 
-void _handleTaskTap(BuildContext context, Task task) {
-  if (task.isFinished) {
-    showSuccessToastMessage('The task has been accomplished');
-  } else {
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyTaskPage(task:task, isHomeReturn: true)));
-  }
-}

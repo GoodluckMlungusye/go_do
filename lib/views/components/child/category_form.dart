@@ -90,7 +90,7 @@ class CategoryForm extends StatelessWidget {
                         ),
                         child: const Text("Save",
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18))),
+                                fontWeight: FontWeight.bold, fontSize: 18,color: Colors.white))),
                   ),
                 ],
               ),

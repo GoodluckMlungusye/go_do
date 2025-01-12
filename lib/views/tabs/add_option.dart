@@ -2,22 +2,17 @@ import 'package:go_do/themes/theme_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_do/views/pages/new_category.dart';
 import 'package:go_do/views/pages/new_task.dart';
+import 'package:go_do/services/service_injector/dependency_container.dart';
+import 'package:go_do/services/ui_service.dart';
 
 class AddOptionPage extends StatelessWidget {
-  const AddOptionPage({super.key});
+  AddOptionPage({super.key});
+  final _uiService = locator.get<UiService>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.primaryColor,
-        elevation: 0,
-        title: const Text(
-          'Select Option',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-      ),
+      appBar: _uiService.getAppBar('Select Option'),
       body: Center(
         child: Column(
           children: [

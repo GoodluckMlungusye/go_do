@@ -13,6 +13,7 @@ class TaskModel extends BaseViewModel {
     taskBox = Hive.box<Task>('task');
     categoryBox = Hive.box<Category>('category');
     _categoryList = categoryBox.values.toList();
+    _filteredTaskList = taskBox.values.toList();
     _categoryNames = _getCategoryNames(_categoryList);
   }
 
@@ -20,11 +21,11 @@ class TaskModel extends BaseViewModel {
   final double _leftPadding = 13;
   late final Box<Task> taskBox;
   late final Box<Category> categoryBox;
-  late final int _selectedCategory;
-  late final String _selectedPriority;
+  String? _selectedPriority;
+  int? _selectedCategory;
   late final List<Category> _categoryList;
   late final List<String> _categoryNames;
-  List<Task> _filteredTaskList = [];
+  late List<Task> _filteredTaskList;
   final List<String> _priorityItems = ['High', 'Medium', 'Low'];
   DateTime _dateTime = DateTime.now();
 
@@ -47,6 +48,10 @@ class TaskModel extends BaseViewModel {
   }
 
   void getCategoryKey(String? newValue) {
+    if (newValue == null) {
+      _showToast('Please select a valid category.', Colors.red);
+      return;
+    }
     final matchingKey = categoryBox.keys.firstWhere(
       (key) => categoryBox.get(key)?.name == newValue,
       orElse: () => null,
@@ -138,13 +143,17 @@ class TaskModel extends BaseViewModel {
   void addTask() {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState?.save();
+      if (_selectedPriority == null || _selectedCategory == null) {
+        _showToast('Please complete all fields.', Colors.red);
+        return;
+      }
       final newTask = Task(
         name: nameController.text.trim(),
-        categoryKey: _selectedCategory,
+        categoryKey: _selectedCategory!,
         tacklingDate: _dateTime.toString(),
         startTime: startTimeController.text.trim(),
         endTime: endTimeController.text.trim(),
-        priority: _selectedPriority,
+        priority: _selectedPriority!,
       );
       taskBox.add(newTask);
       _resetForm();
@@ -158,7 +167,7 @@ class TaskModel extends BaseViewModel {
     dateController.clear();
     startTimeController.clear();
     endTimeController.clear();
-    _selectedPriority = '';
+    _selectedPriority = null;
   }
 
   void filterTasks(String value, String taskCategory) {

@@ -97,7 +97,7 @@ class NewTaskForm extends StatelessWidget {
                         ),
                         child: const Text("Create",
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18))),
+                                fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white))),
                   ),
                   const SizedBox(height: 30),
                 ],

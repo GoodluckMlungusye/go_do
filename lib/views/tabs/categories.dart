@@ -1,27 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:go_do/themes/theme_assets.dart';
 import 'package:go_do/view_models/category_model.dart';
 import 'package:go_do/views/components/main/category_container.dart';
 import 'package:go_do/views/components/main/category_expandable_widget.dart';
+import 'package:go_do/services/service_injector/dependency_container.dart';
+import 'package:go_do/services/ui_service.dart';
 
 class CategoriesPage extends StatelessWidget {
-  const CategoriesPage({super.key});
+  CategoriesPage({super.key});
+  final _uiService = locator.get<UiService>();
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CategoryModel>.reactive(
         builder: (context, model, child) => SafeArea(
               child: Scaffold(
-                  appBar: AppBar(
-                    backgroundColor: AppColors.primaryColor,
-                    title: const Text(
-                      'My Tasks',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    centerTitle: true,
-                    elevation: 0.0,
-                  ),
+                  appBar: _uiService.getAppBar('My Tasks'),
                   body: model.taskBox.isNotEmpty
                       ? Column(
                           children: [

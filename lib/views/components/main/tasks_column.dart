@@ -18,7 +18,9 @@ class TasksColumn extends StatelessWidget {
                 padding: const EdgeInsets.only(
                     top: 20, left: 12, right: 12, bottom: 10),
                 child: TextField(
-                  onChanged: (value) => model.filterTasks(value, taskCategory),
+                  onChanged: (value) {
+                    model.filterTasks(value, taskCategory);
+                  },
                   decoration: InputDecoration(
                       focusColor: AppColors.primaryColor,
                       hintText: 'search task',

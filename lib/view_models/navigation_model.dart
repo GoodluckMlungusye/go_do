@@ -9,9 +9,9 @@ class NavigationModel extends BaseViewModel {
   int currentIndex = 1;
 
   final tabs = [
-    const CategoriesPage(),
-    const HomePage(),
-    const AddOptionPage()
+    CategoriesPage(),
+    HomePage(),
+    AddOptionPage()
   ];
 
   final items = [

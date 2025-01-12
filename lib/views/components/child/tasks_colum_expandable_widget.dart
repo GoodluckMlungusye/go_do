@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:go_do/view_models/task_model.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:go_do/views/pages/my_task.dart';
 import 'package:go_do/models/Task.dart';
 
@@ -11,47 +10,45 @@ class TasksColumnExpandableWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<TaskModel>.reactive(
-        builder: (context, model, child) {
-          return Expanded(
-            child: ValueListenableBuilder(
-                valueListenable: model.taskBox.listenable(),
-                builder: (context, box, child) {
-                  return ListView.builder(
-                      itemCount: model.filteredTaskList.length,
-                      itemBuilder: (BuildContext context, index) {
-                        final task = model.filteredTaskList[index];
-                        return Padding(
-                          padding: const EdgeInsets.only(
-                              left: 16, right: 16, bottom: 8),
-                          child: SizedBox(
-                            height: 120,
-                            width: double.infinity,
-                            child: Card(
-                              elevation: 4,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 20),
-                                child: ListTile(
-                                  onTap: () {
-                                    Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                            builder: (context) => MyTaskPage(
-                                                task: task,
-                                                isHomeReturn: false)));
-                                  },
-                                  title: _buildListTileTitle(model, task),
-                                  leading: model.getPriorityIcon(task.priority),
-                                  trailing: const Icon(
-                                      Icons.arrow_forward_ios_rounded),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      });
-                }),
-          );
-        },
-        viewModelBuilder: () => TaskModel());
+      builder: (context, model, child) {
+        return Expanded(
+          child: model.filteredTaskList.isEmpty
+              ? const Center(child: Text("No tasks found"))
+              : ListView.builder(
+            itemCount: model.filteredTaskList.length,
+            itemBuilder: (BuildContext context, index) {
+              final task = model.filteredTaskList[index];
+              return Padding(
+                padding: const EdgeInsets.only(
+                    left: 16, right: 16, bottom: 8),
+                child: SizedBox(
+                  height: 120,
+                  width: double.infinity,
+                  child: Card(
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: ListTile(
+                        onTap: () {
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => MyTaskPage(
+                                      task: task, isHomeReturn: false)));
+                        },
+                        title: _buildListTileTitle(model, task),
+                        leading: model.getPriorityIcon(task.priority),
+                        trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+      viewModelBuilder: () => TaskModel(),
+    );
   }
 }
 
