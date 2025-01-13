@@ -11,6 +11,7 @@ class TasksColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<TaskModel>.reactive(
+        onViewModelReady: (model) => model.initialize(taskCategory),
         builder: (context, model, child) {
           return Column(
             children: [
@@ -18,9 +19,7 @@ class TasksColumn extends StatelessWidget {
                 padding: const EdgeInsets.only(
                     top: 20, left: 12, right: 12, bottom: 10),
                 child: TextField(
-                  onChanged: (value) {
-                    model.filterTasks(value, taskCategory);
-                  },
+                  onChanged: model.filterTasks,
                   decoration: InputDecoration(
                       focusColor: AppColors.primaryColor,
                       hintText: 'search task',
@@ -36,7 +35,7 @@ class TasksColumn extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              TasksColumnExpandableWidget()
+              TasksColumnExpandableWidget(model: model)
             ],
           );
         },

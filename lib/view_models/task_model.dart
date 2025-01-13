@@ -13,7 +13,6 @@ class TaskModel extends BaseViewModel {
     taskBox = Hive.box<Task>('task');
     categoryBox = Hive.box<Category>('category');
     _categoryList = categoryBox.values.toList();
-    _filteredTaskList = taskBox.values.toList();
     _categoryNames = _getCategoryNames(_categoryList);
   }
 
@@ -25,7 +24,9 @@ class TaskModel extends BaseViewModel {
   int? _selectedCategory;
   late final List<Category> _categoryList;
   late final List<String> _categoryNames;
-  late List<Task> _filteredTaskList;
+  List<Task> _taskList = [];
+  List<Task> _filteredTaskList = [];
+  String? _taskCategory;
   final List<String> _priorityItems = ['High', 'Medium', 'Low'];
   DateTime _dateTime = DateTime.now();
 
@@ -36,12 +37,25 @@ class TaskModel extends BaseViewModel {
   final TextEditingController startTimeController = TextEditingController();
   final TextEditingController endTimeController = TextEditingController();
 
+  String get taskCategory => _taskCategory ?? '';
   double get leftPadding => _leftPadding;
   DateTime get dateTime => _dateTime;
   List<String> get categoryNames => _categoryNames;
   List<String> get priorityItems => _priorityItems;
   List<Task> get filteredTaskList => _filteredTaskList;
   GlobalKey<FormState> get formKey => _formKey;
+
+  void initialize(String category) {
+    _taskCategory = category;
+    fetchTasks();
+  }
+
+  void fetchTasks() {
+    setBusy(true);
+    _taskList = getCategoryTasks(taskCategory);
+    _filteredTaskList = _taskList;
+    setBusy(false);
+  }
 
   List<String> _getCategoryNames(List<Category> categories) {
     return categories.map((category) => category.name).toList();
@@ -170,17 +184,11 @@ class TaskModel extends BaseViewModel {
     _selectedPriority = null;
   }
 
-  void filterTasks(String value, String taskCategory) {
-    if (value.isEmpty) {
-      _filteredTaskList = getCategoryTasks(taskCategory);
-      notifyListeners();
-      return;
-    }
-    final lowerCaseValue = value.toLowerCase();
-    List<Task> taskList = getCategoryTasks(taskCategory);
-    _filteredTaskList = taskList.where((item) {
-      return item.name.toLowerCase().contains(lowerCaseValue);
-    }).toList();
+  void filterTasks(String query) {
+    query = query.toLowerCase();
+    _filteredTaskList = query.isEmpty
+        ? _taskList
+        : _taskList.where((task) => task.name.toLowerCase().contains(query)).toList();
     notifyListeners();
   }
 
