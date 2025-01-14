@@ -40,7 +40,7 @@ class MyTaskPage extends StatelessWidget {
                 elevation: 0,
               ),
               body: SingleChildScrollView(
-                  child: TaskForm(task: task, isHomeReturn: isHomeReturn)),
+                  child: TaskForm(model: model, task: task, isHomeReturn: isHomeReturn)),
             ),
           );
         },

@@ -31,7 +31,7 @@ class NewCategoryPage extends StatelessWidget {
                   backgroundColor: Colors.transparent,
                   elevation: 0,
                 ),
-                body: NewCategoryColumn()),
+                body: NewCategoryColumn(model: model)),
           );
         },
         viewModelBuilder: () => CategoryModel());

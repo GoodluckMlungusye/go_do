@@ -16,9 +16,9 @@ class HomePage extends StatelessWidget {
               child: Scaffold(
                   appBar: _uiService.getAppBar('GoDo'),
                   body: model.todayTasks.isNotEmpty
-                      ? HomePageColumn()
+                      ? HomePageColumn(model: model)
                       : const Center(
-                          child: Text("No tasks scheduled today!"),
+                          child: Text("No tasks scheduled today!")
                         )),
             ),
         viewModelBuilder: () => HomeModel());

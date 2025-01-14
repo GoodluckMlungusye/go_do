@@ -1,35 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:stacked/stacked.dart';
 import 'package:go_do/views/components/child/progress_viewer.dart';
 import 'package:go_do/models/Task.dart';
 import 'package:go_do/themes/theme_assets.dart';
-import 'package:go_do/utils/toast_messages/success_toast_message.dart';
 import 'package:go_do/view_models/home_model.dart';
 import 'package:go_do/views/pages/my_task.dart';
 
 class HomeExpandableWidget extends StatelessWidget {
-  const HomeExpandableWidget({super.key});
+  final HomeModel model;
+  const HomeExpandableWidget({super.key, required this.model});
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<HomeModel>.reactive(
-        builder: (context, model, child) => Expanded(
-              child: ValueListenableBuilder(
-                  valueListenable: model.taskBox.listenable(),
-                  builder: (context, box, child) {
-                    return ListView.builder(
-                        itemCount: model.taskBox.length,
-                        itemBuilder: (BuildContext context, index) {
-                          final task = model.taskBox.getAt(index) as Task;
-                          if (!model.isToday(task.tacklingDate)) {
-                            return Container();
-                          }
-                          return _taskCard(context, model, task, index);
-                        });
-                  }),
-            ),
-        viewModelBuilder: () => HomeModel());
+    return Expanded(
+      child: ValueListenableBuilder(
+          valueListenable: model.taskBox.listenable(),
+          builder: (context, box, child) {
+            return ListView.builder(
+                itemCount: model.taskBox.length,
+                itemBuilder: (BuildContext context, index) {
+                  final task = model.taskBox.getAt(index) as Task;
+                  if (!model.isToday(task.tacklingDate)) {
+                    return Container();
+                  }
+                  return _taskCard(context, model, task, index);
+                });
+          }),
+    );
   }
 }
 

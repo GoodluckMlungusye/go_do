@@ -12,6 +12,7 @@ class TasksPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<TaskModel>.reactive(
+        onViewModelReady: (model) => model.initialize(taskCategory),
         builder: (context, model, child) {
           return SafeArea(
             child: Scaffold(
@@ -31,7 +32,7 @@ class TasksPage extends StatelessWidget {
                   ),
                   centerTitle: true,
                 ),
-                body: TasksColumn(taskCategory: taskCategory)),
+                body: TasksColumn(model: model)),
           );
         },
         viewModelBuilder: () => TaskModel());

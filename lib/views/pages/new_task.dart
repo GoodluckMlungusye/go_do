@@ -34,7 +34,7 @@ class NewTaskPage extends StatelessWidget {
               body: SingleChildScrollView(
                 child: Column(
                   children: [
-                    NewTaskForm()
+                    NewTaskForm(model: model)
                   ],
                 ),
               ),

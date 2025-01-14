@@ -19,9 +19,9 @@ class CategoriesPage extends StatelessWidget {
                   body: model.taskBox.isNotEmpty
                       ? Column(
                           children: [
-                            CategoryContainer(),
+                            CategoryContainer(model: model),
                             const SizedBox(height: 20),
-                            CategoryExpandableWidget()
+                            CategoryExpandableWidget(model: model)
                           ],
                         )
                       : const Center(
