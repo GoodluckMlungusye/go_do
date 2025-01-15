@@ -62,7 +62,16 @@ class CategoryModel extends BaseViewModel {
         getTotalCategoryTasksAccomplished(categoryName);
   }
 
+  // String getCompletionMessage(int accomplishedTasks, int totalTasks) {
+  //   return accomplishedTasks < 2
+  //       ? "$accomplishedTasks out of $totalTasks is completed"
+  //       : "$accomplishedTasks out of $totalTasks are completed";
+  // }
+
   String getCompletionMessage(int accomplishedTasks, int totalTasks) {
+    if (accomplishedTasks == 0) {
+      return "No tasks accomplished";
+    }
     return accomplishedTasks < 2
         ? "$accomplishedTasks out of $totalTasks is completed"
         : "$accomplishedTasks out of $totalTasks are completed";

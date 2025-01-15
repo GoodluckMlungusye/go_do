@@ -1,4 +1,3 @@
-import 'package:go_do/themes/theme_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_do/views/pages/new_category.dart';
 import 'package:go_do/views/pages/new_task.dart';
@@ -13,42 +12,59 @@ class AddOptionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _uiService.getAppBar('Select Option'),
-      body: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 40),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'You can add new category that matches your task or proceed to create a task based on added categories.',
-                style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontSize: 16,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF9D4EDD),Color(0xFFC77DFF)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  'You can add a new category that matches your task or proceed to create a task based on added categories.',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        offset: Offset(1.0, 1.0),
+                        blurRadius: 3.0,
+                        color: Colors.black38,
+                      ),
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
-            ),
-            const SizedBox(height: 40),
-            _buildOptionButton(
-              context: context,
-              label: "Add Category",
-              onPressed: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const NewCategoryPage()),
-                );
-              },
-            ),
-            const SizedBox(height: 30),
-            _buildOptionButton(
-              context: context,
-              label: "Create Task",
-              onPressed: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const NewTaskPage()),
-                );
-              },
-            ),
-          ],
+              const SizedBox(height: 50),
+              _buildOptionButton(
+                context: context,
+                label: "Add Category",
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const NewCategoryPage()),
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
+              _buildOptionButton(
+                context: context,
+                label: "Create Task",
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const NewTaskPage()),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -60,25 +76,24 @@ class AddOptionPage extends StatelessWidget {
     required VoidCallback onPressed,
   }) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * .9,
+      width: MediaQuery.of(context).size.width * 0.85,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          side: const BorderSide(width: 1, color: AppColors.primaryColor),
-          backgroundColor: Colors.white,
+          padding: const EdgeInsets.all(14.0),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
+            borderRadius: BorderRadius.circular(12.0),
           ),
+          elevation: 5,
+          shadowColor: Colors.black45,
+          backgroundColor: Colors.white,
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Text(
-            label,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-              color: Colors.black45,
-            ),
+        child: Text(
+          label,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            color: Colors.black87,
           ),
         ),
       ),
