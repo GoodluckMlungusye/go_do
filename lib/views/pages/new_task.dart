@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:go_do/view_models/task_model.dart';
-import 'package:go_do/views/starters/navigation.dart';
+import 'package:go_do/views/starters/main_layout.dart';
 import 'package:go_do/views/components/main/new_task_form.dart';
 
 class NewTaskPage extends StatelessWidget {
@@ -18,7 +18,7 @@ class NewTaskPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              const Navigation()));
+                              const MainLayout()));
                     },
                     icon: const Icon(Icons.arrow_back_ios,
                         color: Colors.black26)),

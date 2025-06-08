@@ -1,7 +1,7 @@
 import 'package:go_do/themes/theme_assets.dart';
 import 'package:flutter/material.dart';
 
-import 'navigation.dart';
+import 'main_layout.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -32,7 +32,7 @@ class WelcomePage extends StatelessWidget {
             child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => const Navigation()));
+                      builder: (context) => const MainLayout()));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryColor,

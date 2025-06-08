@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../themes/theme_assets.dart';
-import 'package:go_do/views/starters/loader.dart';
+import 'package:go_do/views/starters/splash_screen.dart';
+import 'package:go_do/views/tabs/categories.dart';
+import 'package:go_do/views/tabs/home.dart';
+import 'package:go_do/views/tabs/add_option.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -9,7 +12,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'GoDo App',
+      title: 'GoDo',
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
         primaryColor: AppColors.primaryColor,
@@ -17,7 +20,13 @@ class App extends StatelessWidget {
         primaryColorLight: AppColors.primaryColorLight,
         fontFamily: AppFonts.primaryFont,
       ),
-      home: const Loader(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const SplashScreen(),
+        '/categories': (context) => CategoriesPage(),
+        '/home': (context) => HomePage(),
+        '/options': (context) => AddOptionPage(),
+      },
     );
   }
 }

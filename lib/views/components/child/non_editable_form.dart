@@ -2,7 +2,7 @@ import 'package:go_do/models/Task.dart';
 import 'package:go_do/views/pages/tasks.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:go_do/views/starters/navigation.dart';
+import 'package:go_do/views/starters/main_layout.dart';
 import 'package:go_do/view_models/task_model.dart';
 import 'package:go_do/views/components/child/form_button.dart';
 import 'package:go_do/views/components/child/task_check_box.dart';
@@ -20,7 +20,7 @@ class NonEditableForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget _targetWidget = isHomeReturn
-        ? const Navigation()
+        ? const MainLayout()
         : TasksPage(
             taskCategory: model.categoryBox.getAt(task.categoryKey)!.name,
           );

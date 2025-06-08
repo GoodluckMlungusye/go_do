@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_do/themes/theme_assets.dart';
-import 'package:go_do/views/starters/navigation.dart';
+import 'package:go_do/views/starters/main_layout.dart';
 
 class ProgressViewer extends StatefulWidget {
 
@@ -15,7 +15,7 @@ class _ProgressViewerState extends State<ProgressViewer> {
   Future<void> _navigateAfterDelay() async {
     await Future.delayed(const Duration(seconds: 2));
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (BuildContext context) => const Navigation()));
+        builder: (BuildContext context) => const MainLayout()));
   }
 
   @override

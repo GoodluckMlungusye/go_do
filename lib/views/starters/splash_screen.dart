@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:go_do/themes/theme_assets.dart';
 import 'package:go_do/views/starters/welcome.dart';
 
-class Loader extends StatefulWidget {
-  const Loader({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
   @override
-  State<Loader> createState() => _LoaderState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _LoaderState extends State<Loader> {
+class _SplashScreenState extends State<SplashScreen> {
   Future<void> _navigateAfterDelay() async {
     await Future.delayed(const Duration(seconds: 4));
     Navigator.of(context).pushReplacement(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_do/views/starters/navigation.dart';
+import 'package:go_do/views/starters/main_layout.dart';
 import 'package:stacked/stacked.dart';
 import 'package:go_do/view_models/category_model.dart';
 import 'package:go_do/views/components/main/new_category_column.dart';
@@ -18,7 +18,7 @@ class NewCategoryPage extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                const Navigation()));
+                                const MainLayout()));
                       },
                       icon: const Icon(Icons.arrow_back_ios,
                           color: Colors.black26)),
